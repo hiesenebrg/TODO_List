@@ -4,6 +4,27 @@ let input = document.querySelector('.input');
 let complete_task = document.querySelector('.complete-task');
 let delete_areas=[];
 let check_boxes = [];
+let total_tasks = 0;
+function delte_hover(){
+    delete_areas.forEach((dee_area)=>{
+        dee_area.addEventListener('mouseover',function(e){
+            if(e.target.className == 'delete-area'){
+                e.target.innerHTML = `<i class="fa-solid fa-trash-can"></i>`
+            }
+        })
+        dee_area.addEventListener('mouseout',function(e){
+            if(e.target.className == 'delete-area'){
+                e.target.innerHTML = ``;
+            }
+        })
+    }
+        
+    )
+}
+function tasknumer(){
+    let completetask = document.querySelector('.complete-remaining span');
+    completetask.innerHTML=`${total_tasks} `;
+}
 function get_delete_areas(){
      delete_areas = document.querySelectorAll('.delete-area');
     check_boxes = document.querySelectorAll('.radio');
@@ -16,8 +37,15 @@ function deletes(){
             let idss= delete_area.getAttribute('data-value');
         let selected = document.querySelector(`#${idss}`);
         console.log(selected);
-
+        
         selected.remove();
+        let elem = selected.querySelector('input');
+        if(!elem.checked){
+            total_tasks-=1;
+            tasknumer();  
+        }
+       
+        console.log(total_tasks);
         })
     })
     }
@@ -34,7 +62,13 @@ input.addEventListener('keyup',function add(e){
         <div class="delete-area" data-value=${e.target.value}></div>`
         console.log(content);
         contents.appendChild(content);
+        total_tasks+=1;
+        e.target.value = "";
+        
+        console.log(total_tasks);
         get_delete_areas();
+        delte_hover();
+        tasknumer();
         deletes();
     }
 });
@@ -46,6 +80,7 @@ let current ;
     if(check_box.checked){
         current =  check_box.value;
     }
+})
     if(current){
         let compl_div = document.querySelector(`#${current}`);
         console.log(compl_div);
@@ -55,6 +90,9 @@ let current ;
     <div class="content-text"> ${compl_div.getAttribute('id')}</div>
     <div class="delete-area" data-value=${compl_div.getAttribute('id')}></div>`
     get_delete_areas();
+    total_tasks-=1;
+    delte_hover();
+    tasknumer();
     deletes();
 console.log(compl_div);
 
@@ -62,7 +100,7 @@ console.log(compl_div);
     }else{
         alert("Please select the task")
     }
-})
+
 })
 
 
